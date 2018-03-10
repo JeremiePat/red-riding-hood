@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Little Red Riding Hood</title>
+
+<link href="https://fonts.googleapis.com/css?family=Cedarville+Cursive|Fira+Sans+Condensed:300i,600i|Lato:300i|Leckerli+One|Open+Sans|Sunshiney" rel="stylesheet">
+
+<style>
+
+  /* LAYOUT ---------------------------------------------------------------- */
+  * { box-sizing: border-box }
+
+  html, body { height: 100%; background: hsl(50, 50%, 90%) }
+  body       { display: flex; padding: 0; margin: 0; align-items: center; justify-content: center; flex-direction: column }
+  main       { width: 90vw; height: 45vw }
+  svg        { width: 100%; height: 100%; overflow: visible }
+  aside      { width: 90vw; height: 3rem; text-align: center; font: italic 2.5rem/1.25 'Fira Sans Condensed', sans-serif }
+  ol         { list-style: none; padding: 0; margin: 0 }
+  li         { display: none  }
+  li.show    { display: block }
+
+  @media (max-width: 90rem) {aside {font-size: 2rem   }}
+  @media (max-width: 74rem) {aside {font-size: 1.75rem}}
+  @media (max-width: 64rem) {aside {font-size: 1.5rem }}
+  @media (max-width: 54rem) {aside {font-size: 1.25rem}}
+  @media (max-width: 45rem) {aside {font-size: 1rem   }}
+
+  a:focus, a:active { outline:none; filter: drop-shadow(0 0 2px rgba(0,0,0,.25)) }
+
+
+  /* UTILS ----------------------------------------------------------------- */
+  #next circle,   #prev circle   { fill: hsl(50, 50%, 80%) }
+  #next polyline, #prev polyline { fill: none; stroke: hsla(0, 0%, 0%, .3); stroke-width: 2px }
+
+  :root {
+    --color-skin   : hsl( 15,100%, 90%);
+    --color-hood   : hsl(  0,100%, 40%);
+    --color-hair   : hsl( 35, 30%, 10%);
+    --color-fur    : hsl( 25, 60%, 10%);
+    --color-wood   : hsl( 20, 25%, 25%);
+    --color-roof   : hsl( 20, 50%, 30%);
+    --color-cake   : hsl( 40, 70%, 40%);
+    --color-wall   : hsl( 35, 50%, 70%);
+    --color-butter : hsl( 60,100%, 80%);
+    --color-smoke  : hsl(  0,  0%, 55%);
+    --color-steel  : hsl(  0,  0%, 80%);
+    --color-ceramic: hsl(190,100%, 96%);
+    --color-light  : hsl(  0,  0%,100%);
+    --color-grass  : hsl( 90, 40%, 30%);
+
+    --shadow: drop-shadow(2px 0 1px rgba(0,0,0,.2));
+  }
+
+
+  /* CHARACTERS ------------------------------------------------------------ */
+  #cloud                { fill: var(--color-smoke) }
+
+  #capBack              { fill: var(--color-hood) }
+  #capFront             { fill: var(--color-hood); filter: drop-shadow(0 2px 1px rgba(0,0,0,.4)) }
+
+  #red .face            { fill: var(--color-skin) }
+  #red .hair            { fill: var(--color-hair) }
+  #red .hair.left       { clip-path: circle(60% at 10% -10%) }
+  #red .hair.right      { clip-path: circle(60% at 90% -10%) }
+
+  #ninja .face          { fill: var(--color-skin) }
+  #ninja .mask          { fill: var(--color-hood); clip-path: inset(0 0 50% 0); transform-origin: 60px 50px }
+  #ninja .mask.top      { transform: rotate( -15deg) }
+  #ninja .mask.bottom   { transform: rotate(-180deg) }
+  #ninja .node.up       { fill: var(--color-hood); clip-path: circle(60% at  60% -30%) }
+  #ninja .node.down     { fill: var(--color-hood); clip-path: circle(60% at 100% 110%) }
+
+  #saber .blade         { fill: var(--color-steel) }
+  #saber .grip          { fill: var(--color-wood ) }
+
+  #butter .butter       { fill: var(--color-butter ); filter: var(--shadow) }
+  #butter .plate        { fill: var(--color-ceramic); filter: var(--shadow) }
+  #butter .cake         { fill: var(--color-wood   ); stroke: var(--color-cake); stroke-width: 2px; clip-path: circle(40% at 50% 50%); transform-origin: 150px 45px; transform: rotate(30deg) }
+
+  #wUp .cross           { stroke: var(--color-light); stroke-width: .75px; stroke-linecap: round }
+  #wUp .eye             { fill: var(--color-light) }
+  #wUp, #wDown          { fill: var(--color-fur) }
+  #wolf #wDown          { transform-origin: 150px 50px; transform: rotate(-10deg) }
+  #wUp .eye .normal     { display: var(--wolf-eye,       block) }
+  #wUp .eye .surprised  { display: var(--wolf-surprised, none ) }
+  #wUp .eye .cross      { display: var(--wolf-kill,      none ) }
+  .wCapBack, .wCapFront { transform-origin: 140px 50px; transform: translate(15px) rotate(90deg) scale(.8) }
+
+  #wolf2                { transform-origin: 100px 50px; transform: rotateY(180deg) }
+
+  #gCapBack,
+  #gCapFront            { fill: var(--color-ceramic) }
+  #granny .face         { fill: var(--color-skin   ) }
+  #granny .hair         { fill: var(--color-steel  ) }
+  #granny .hair.left    { clip-path: circle(60% at 10% -10%) }
+  #granny .hair.right   { clip-path: circle(60% at 90% -10%) }
+  #gCapFront            { filter: drop-shadow(0 2px 1px rgba(0,0,0,.4)) }
+
+  #tree .trunk          { fill: var(--color-wood ) }
+  #tree .foliage        { fill: var(--color-grass); stroke: var(--color-light) }
+
+  #forest .tree         { transform-origin: 140px 70px }
+  #forest .tree.t2      { transform: scale(0.9) }
+  #forest .tree.t3      { transform: scale(1.2) }
+
+  #cottage .wall        { fill: var(--color-wall) }
+  #cottage .roof        { fill: var(--color-roof   ); stroke: var(--color-wood); stroke-width: 4px; stroke-linejoin: round }
+  #cottage .window      { fill: var(--color-ceramic); stroke: var(--color-wood) }
+  #cottage .door        { fill: var(--color-wood) }
+  #cottage .bush        { fill: var(--color-grass); clip-path: inset(0 0 50% 0) }
+
+  #smoke .cloud         { transform-origin: 152.5px 17.5px;
+                          animation: 28s ease-in infinite smoking; opacity: 0 }
+  #smoke .cloud.c1      { animation-delay:   0s }
+  #smoke .cloud.c2      { animation-delay:  -4s }
+  #smoke .cloud.c3      { animation-delay:  -8s }
+  #smoke .cloud.c4      { animation-delay: -12s }
+  #smoke .cloud.c5      { animation-delay: -16s }
+  #smoke .cloud.c6      { animation-delay: -20s }
+  #smoke .cloud.c7      { animation-delay: -24s }
+
+
+  /* ANIMATIONS ------------------------------------------------------------ */
+  @keyframes smoking {
+    0%   {transform: translate( 0px,  0px) scale(0.0); opacity: 1.0}
+    20%  {transform: translate( 0px,  0px) scale(0.3); opacity: 0.9}
+    40%  {transform: translate( 2px, -1px) scale(0.5); opacity: 0.8}
+    60%  {transform: translate( 5px, -3px) scale(0.7); opacity: 0.6}
+    90%  {transform: translate(10px, -4px) scale(0.9); opacity: 0.3}
+    100% {transform: translate(12px, -5px) scale(1.0); opacity: 0.0}
+  }
+
+
+  /* SCENE ----------------------------------------------------------------- */
+  .scene          { display: none  }
+  .scene:target   { display: block }
+  .scene text     { font: 12px "Leckerli One", cursive; text-anchor: middle; fill: white }
+  .scene .left    { transform-origin:  60px 50px }
+  .scene .right   { transform-origin: 140px 50px }
+  .scene .right * { transform-origin: 140px 50px }
+
+
+  /* SCENE 1 --------------------------------------------------------------- */
+  @keyframes fadeIn  {from {opacity: 0} to {opacity: 1}}
+
+  #s1 .red      { transform: translate(40px,0) }
+  #s1 .red      { animation: 4s ease 0s both fadeIn }
+
+
+  /* SCENE 2 --------------------------------------------------------------- */
+  @keyframes centerToLeft  {from {transform: translate( 40px,0)}}
+  @keyframes centerToRight {from {transform: translate(-40px,0)}}
+  @keyframes backToFront   {from {transform: rotateY(-180deg); backface-visibility: hidden}}
+  @keyframes frontToBack   {to   {transform: rotateY( 180deg); backface-visibility: hidden}}
+
+  #s2 .left     { animation: 0.50s ease-out       0s both centerToLeft }
+  #s2 .right    { animation: 0.50s ease-in     1.00s both fadeIn,
+                             0.30s ease-out    1.00s both centerToRight }
+  #s2 .butter   { animation: 0.15s ease-in-out 2.65s both backToFront }
+  #s2 .granny   { animation: 0.15s ease-in-out 2.65s both frontToBack }
+
+
+  /* SCENE 3 --------------------------------------------------------------- */
+  @keyframes fadeOut {from {opacity: 1} to {opacity: 0}}
+  @keyframes goMid   {from {transform: translate(0,  30px)}}
+  @keyframes goUp    {to   {transform: translate(0, -30px)}}
+
+  #s3 .butter   { animation: 0.5s ease-out 0s both     goUp,
+                             0.3s ease-out 0s both     fadeOut }
+  #s3 .forest   { animation: 0.5s ease-in  0s both     fadeIn,
+                             0.3s ease-in  0s both     goMid,
+                             0.5s ease-out 2s forwards goUp,
+                             0.3s ease-out 2s forwards fadeOut }
+  #s3 .wolf     { animation: 0.5s ease-in  2s both     fadeIn,
+                             0.5s ease-in  2s both     goMid }
+
+
+  /* SCENE 4 --------------------------------------------------------------- */
+  @keyframes bounceUp {50% {transform: translate(0, -10px)}}
+
+  #s4 .right    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 5 --------------------------------------------------------------- */
+  #s5 .left     { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 6 --------------------------------------------------------------- */
+  @keyframes moveLeft {to {transform: translate(-20px, 0)}}
+
+  #s6 .right    { animation: 3s cubic-bezier(1,0,1,0) 0s both moveLeft }
+
+
+  /* SCENE 7 --------------------------------------------------------------- */
+  @keyframes pitchLeft {to {transform: translate( -10px, 0)}}
+  @keyframes wideLeft  {to {transform: translate(-100px, 0)}}
+
+  #s7 .right    { transform: translate(-20px, 0px) }
+  #s7 .left     { animation: 0.2s ease 0s both pitchLeft,
+                             0.3s ease 2s both wideLeft ,
+                             0.2s ease 2s both fadeOut }
+
+  /* SCENE 8 --------------------------------------------------------------- */
+  @keyframes rightToCenter {to {transform: translate(-40px, 0)}}
+  @keyframes wideRight     {to {transform: translate(150px, 0)}}
+  @keyframes fullFlip      {to {transform: rotateY(180deg)}}
+
+  #s8 .wolf     { transform: translate(-20px, 0px) }
+  #s8 .right    { animation: 0.25s ease    5.5s forwards fullFlip; }
+  #s8 .wolf     { animation: 5.00s linear    0s forwards rightToCenter,
+                             0.25s ease    5.8s forwards wideRight,
+                             0.25s ease-in 5.8s both     fadeOut }
+
+
+  /* SCENE 9 --------------------------------------------------------------- */
+  @keyframes leftIn  {from {transform: translate(-100px, 0)}}
+  @keyframes rightIn {from {transform: translate( 100px, 0)}}
+
+  #s9 .left     { animation: 0.2s ease 0s both leftIn,
+                             0.2s ease 0s both fadeIn }
+  #s9 .right    { animation: 0.2s ease 0s both rightIn,
+                             0.2s ease 0s both fadeIn }
+
+
+  /* SCENE 10 -------------------------------------------------------------- */
+  #s10 .cottage { animation: 0.15s ease-in-out   0s both frontToBack }
+  #s10 .granny  { animation: 0.15s ease-in-out   0s both backToFront,
+                             0.20s ease-in-out 0.3s both bounceUp }
+
+
+  /* SCENE 11 -------------------------------------------------------------- */
+  #s11 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 12 -------------------------------------------------------------- */
+  #s12 .right   { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 13 -------------------------------------------------------------- */
+  @keyframes bite {
+    0%      {transform: rotate( -9deg)}
+    40%,70% {transform: rotate(-70deg)}
+    80%     {transform: rotate(  9deg)}
+    100%    {transform: rotate(-10deg)}
+  }
+
+  @keyframes crossToRight {to  {transform: translate(80px, 0)}}
+  @keyframes rollBack     {70% {transform: rotate(40deg)}}
+
+  #s13 .left g  { transform-origin: 100px 50px; transform: rotateY(180deg) }
+  #s13 .wDown   { transform-origin: 150px 50px }
+  #s13 .wUp     { transform-origin: 150px 50px }
+
+  #s13 .left    { animation: 0.2s ease-in-out   0s both bounceUp,
+                             0.5s ease        1.0s both crossToRight }
+  #s13 .wDown   { animation: 0.3s ease        1.0s both bite         }
+  #s13 .wUp     { animation: 0.3s ease        1.0s both rollBack     }
+  #s13 .right   { animation: 0.2s ease        1.2s both fadeOut      }
+
+
+  /* SCENE 14 -------------------------------------------------------------- */
+  #s14 .wolf    { animation: 0.5s ease-in-out 1s forwards frontToBack }
+  #s14 .cottage { animation: 0.5s ease-in-out 1s both     backToFront }
+
+
+  /* SCENE 15 -------------------------------------------------------------- */
+  #s15 .left    { animation: 1s ease 0s forwards leftIn }
+
+
+  /* SCENE 16 -------------------------------------------------------------- */
+  #s16 .cottage { animation: 0.25s ease-in-out   0s both frontToBack }
+  #s16 .wolf    { animation: 0.25s ease-in-out   0s both backToFront,
+                             0.20s ease-in-out 0.5s both bounceUp }
+
+
+  /* SCENE 17 -------------------------------------------------------------- */
+  #s17 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 18 -------------------------------------------------------------- */
+  #s18 .right   { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 19 -------------------------------------------------------------- */
+  @keyframes forthAndBack {80%,90% {transform: translate(10px, 0)}}
+
+  #s19 .left    { animation: 5s ease 0s both forthAndBack }
+
+
+  /* SCENE 20 -------------------------------------------------------------- */
+  #s20 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 21 -------------------------------------------------------------- */
+  @keyframes stepToLeft {to {transform: translate(-5px, 0)}}
+
+  #s21 .right   { animation: 0.2s ease-in-out 0s both bounceUp,
+                             0.2s ease-in-out 0s both stepToLeft }
+
+
+  /* SCENE 22 -------------------------------------------------------------- */
+  #s22 .right   { transform: translate(-5px, 0) }
+  #s22 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 23 -------------------------------------------------------------- */
+  #s23 .right   { transform: translate(-5px, 0) }
+  #s23 .wolf    { animation: 0.2s ease-in-out 0s both bounceUp,
+                             0.2s ease-in-out 0s both stepToLeft }
+
+
+  /* SCENE 24 -------------------------------------------------------------- */
+  #s24 .right   { transform: translate(-10px, 0) }
+  #s24 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+
+
+  /* SCENE 25 -------------------------------------------------------------- */
+  @keyframes openWideDown {4% {transform: rotate(-50deg)} 100% {transform: rotate(-60deg)}}
+  @keyframes openWideUp   {4% {transform: rotate( 25deg)} 100% {transform: rotate( 40deg)}}
+
+  #s25 .right   { transform: translate(-10px, 0) }
+  #s25 .wDown   { transform-origin: 150px 50px; transform: rotate(-10deg) }
+  #s25 .wUp     { transform-origin: 150px 50px }
+
+  #s25 .wDown   { animation:  0.2s ease-in-out   0s both     bounceUp,
+                             10.0s ease-out    0.3s both     openWideDown }
+  #s25 .wUp     { animation:  0.2s ease-in-out   0s both     bounceUp,
+                             10.0s ease-out    0.3s both     openWideUp }
+  #s25 .right   { animation:  0.4s ease-out    0.3s forwards rightToCenter }
+
+
+  /* SCENE 26 -------------------------------------------------------------- */
+  @keyframes puffes  { to {transform: scale(2.2); opacity: 0}}
+
+  #s26 .right   { transform: translate(-40px, 0) }
+  #s26 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s26 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none }
+  #s26 .puff    { transform-origin:  60px 55px }
+
+  #s26 .puff    { animation: 0.5s ease-out both puffes; }
+
+
+  /* SCENE 27 -------------------------------------------------------------- */
+  #s27 .right   { transform: translate(-40px, 0) }
+  #s27 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s27 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none; }
+
+  #s27 .red     { animation: 0.25s ease-in-out 0s both backToFront }
+  #s27 .cap     { animation: 0.25s ease-in-out 0s both frontToBack }
+
+
+  /* SCENE 28 -------------------------------------------------------------- */
+  @keyframes crossToLeft {to {transform: rotate(-10deg) translate(-80px, 0)}}
+  @keyframes shutIt      {to {transform: rotate(  0deg)}}
+  @keyframes cutIt       {to {transform: rotate(240deg)}}
+
+  #s28 .right   { transform-origin:  65px 50px; transform: translate(-40px, 0) }
+  #s28 .saber   { transform-origin:  53px 57px; }
+  #s28 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s28 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-kill: block; --wolf-eye: none; }
+
+  #s28 .left    { animation: 0.15s ease 0s both crossToRight }
+  #s28 .saber   { animation: 0.25s ease 0s both cutIt }
+  #s28 .right   { animation: 0.15s ease 0s both crossToLeft }
+  #s28 .wDown   { animation: 0.15s ease 0s both shutIt }
+  #s28 .wUp     { animation: 0.15s ease 0s both shutIt }
+
+
+  /* SCENE 29 -------------------------------------------------------------- */
+  #s29 .puff    { transform-origin:  60px 55px; transform: scale(1.5) }
+  #s29 .saber   { transform-origin: 133px 57px; transform: rotate(240deg) }
+
+  #s29 .red     { animation: 0.25s ease-in-out 0s both backToFront }
+  #s29 .ninja   { animation: 0.25s ease-in-out 0s both frontToBack }
+  #s29 .puff    { animation: 0.20s ease        0s both puffes }
+  #s29 .left    { animation: 0.50s ease-out  0.2s both fadeIn }
+
+
+  /* SCENE 30 -------------------------------------------------------------- */
+  @keyframes passAlong {
+    0%   {opacity: 0; transform: scale(0.5)}
+    50%  {opacity: 1; transform: translate(-40px, 0) scale(1)}
+    100% {opacity: 0; transform: translate(-70px, 0) scale(0.5)}
+  }
+
+  #s30 .cake    { transform-origin: 100px 50px }
+  #s30 .cake    { animation: 1s ease both passAlong }
+
+
+  /* SCENE 31 -------------------------------------------------------------- */
+  #s31 .right   { animation: 0.2s ease-in-out both bounceUp }
+  #s31 .left    { animation: 0.2s ease-in-out both bounceUp }
+
+</style>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const selector = 'aside ol li'
+  const $$ = document.querySelectorAll.bind(document)
+
+  function showTxt() {
+    var cls = location.hash.slice(1)
+
+    $$(selector).forEach((t) => {
+      t.classList.toggle('show', t.classList.contains(cls))
+    })
+  }
+
+  window.addEventListener('hashchange', showTxt)
+
+  location.hash = location.hash || '#s0'
+  showTxt()
+
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'f') {
+      document.body.requestFullscreen();
+    }
+  })
+})
+</script>
+
+<main>
+  <svg viewBox="0 0 200 100">
+
+    <path class="grid v" d="M  5,0 V120 M 25, 0 V120 M 45, 0 V120 M 65, 0 V120 M 85, 0 V120
+                            M105,0 V120 M125, 0 V120 M145, 0 V120 M165, 0 V120 M185, 0 V120" />
+    <path class="grid h" d="M  0,5 H200 M  0,25 H200 M  0,45 H200 M  0,65 H200 M  0,85 H200" />
+
+    <defs>
+      <!-- * CHARACTERS ************************** -->
+
+      <!-- natural right -->
+      <g id="butter">
+        <path class="cake" d="
+          M120,20 h50 v50 h-50 v-50 Z
+          M125,30 h40 M125,40 h40 M125,50 h40 M125,60 h40
+          M130,25 v40 M140,25 v40 M150,25 v40 M160,25 v40" />
+        <rect class="butter" x="115" y="45" width="20" height="20" rx="2" ry="2" />
+        <rect class="plate"  x="110" y="60" width="30" height="5"  rx="2" ry="2" />
+      </g>
+
+      <g id="wolf">
+        <g id="wDown">
+          <polygon class="jaw down" points="120,60 155,60 155,47.5
+            152.5,50 150,47.5 147.5,50 145,47.5
+            142.5,50 140,47.5 137.5,50 135,47.5
+            132.5,50 130,47.5 127.5,50 125,47.5
+            122.5,50 120,47.5 117.5,50 " />
+        </g>
+
+        <g id="wUp">
+          <polygon class="jaw up" points="115,40 155,40 155,50
+            152.5,52.5 150,50 147.5,52.5 145,50
+            142.5,52.5 140,50 137.5,52.5 135,50
+            132.5,52.5 130,50 127.5,52.5 125,50
+            122.5,52.5 120,50 117.5,55   115,50" />
+
+          <circle  class="nose"  cx="117.5" cy="42.5" r="5" />
+          <polygon class="hear"  points="145,40 165,30 170,50" />
+          <circle  class="skull" cx="155" cy="50" r="15" />
+          <g class="eye">
+            <polygon class="normal"    points="155,40 150,42.5 150,45" />
+            <circle  class="surprised" cx="151" cy="43" r="2" />
+            <path    class="cross"     d="M150,42 L155,47 M155,42 L150,47" />
+          </g>
+        </g>
+      </g>
+
+      <g id="forest">
+        <use href="#tree" class="tree t1" x="20" />
+        <use href="#tree" class="tree t2" x="-20" />
+        <use href="#tree" class="tree t3" />
+      </g>
+
+      <g id="tree">
+        <rect class="trunk" x="135" y="40" width="10" height="30" rx="1" ry="1" />
+        <path class="foliage" d="M143,50 A5,5,0,0,1,127,43 A5,5,0,0,1,131,30 A5,5,0,0,1,145,29 A5,5,0,0,1,151,45 A5,5,0,0,1,143,50 Z" />
+      </g>
+
+      <circle id="cloud" cx="152.5" cy="17.5" r="5" />
+
+      <g id="granny">
+        <g id="gCapBack">
+          <path   d="M120,70 V50 A20,20,0,0,1,160,50 V70 H159 V65 A5,5,0,0,0,154,60 H126 A5,5,0,0,0,121,65 V70 Z" />
+          <circle cx="121" cy="70" r="2.5" />
+          <circle cx="159" cy="70" r="2.5" />
+        </g>
+        <circle  class="face"       cx="140" cy="50" r="15" />
+        <circle  class="hair left"  cx="140" cy="50" r="15" />
+        <circle  class="hair right" cx="140" cy="50" r="15" />
+        <path id="gCapFront" d="M120,60 V50 A20,20,0,0,1,160,50 V60 A20,20,0,0,0,120,60 Z" />
+      </g>
+
+      <g id="cottage">
+        <g id="smoke">
+          <use href="#cloud" class="cloud c1" />
+          <use href="#cloud" class="cloud c2" />
+          <use href="#cloud" class="cloud c3" />
+          <use href="#cloud" class="cloud c4" />
+          <use href="#cloud" class="cloud c5" />
+          <use href="#cloud" class="cloud c6" />
+          <use href="#cloud" class="cloud c7" />
+        </g>
+
+        <circle class="bush" cx="165" cy="65" r="10" />
+        <circle class="bush" cx="165" cy="57" r="5" />
+
+        <rect class="wall" x="115" y="35" width="50" height="30" />
+        <rect class="wall chimney" x="150" y="17" width="5" height="7" />
+        <polygon class="roof" points="110,35 115,25 165,25 170,35" />
+        <rect class="door" x="125" y="45" width="10" height="20" />
+        <rect class="window" x="145" y="45" width="10" height="10" />
+
+        <circle class="bush" cx="165" cy="65" r="7" />
+      </g>
+
+      <!-- natural left -->
+      <g id="red">
+        <polygon id="capBack" points="60,25 30,65 90,65" />
+        <circle  class="face"       cx="60" cy="55" r="15" />
+        <circle  class="hair left"  cx="60" cy="55" r="15" />
+        <circle  class="hair right" cx="60" cy="55" r="15" />
+        <path    id="capFront" d="M30,65 L60,25 L90,65 A50,100,0,0,0,30,65" />
+      </g>
+
+      <use id="wolf2" href="#wolf"" />
+
+      <g id="ninja">
+        <circle  class="face"        cx="60" cy="50" r="15" />
+        <circle  class="mask top"    cx="60" cy="50" r="15" />
+        <circle  class="mask bottom" cx="60" cy="50" r="15" />
+        <circle  class="node up"     cx="40" cy="61" r="10" />
+        <circle  class="node down"   cx="40" cy="55" r="10" />
+      </g>
+
+      <g id="saber">
+        <path class="grip"  d="M52,60 v-8 h-2 v-2 h6 v2 h-2 v8 z" />
+        <path class="blade" d="M52,50 v-30 l2,2 v28 z" />
+      </g>
+
+      <!-- * NAVIGATION ************************** -->
+      <g id="next">
+        <circle cx="195" cy="50" r="10" />
+        <polyline points="193,45 197,50 193,55" />
+      </g>
+
+      <g id="prev">
+        <circle cx="5" cy="50" r="10" />
+        <polyline points="7,45 3,50 7,55" />
+      </g>
+    </defs>
+
+    <!-- * SCENE ******************************* -->
+    <a id="s0" class="scene s0" href="#s1">
+      <rect x="0"   y="0"  width="200" height="100" />
+      <text x="100" y="55" text-anchor="middle">The Little Red Riding Hood</text>
+    </a>
+
+    <g id="s1" class="scene s1">
+      <use class="red" href="#red" />
+
+      <a href="#s2"><use href="#next" /></a>
+      <a href="#s0"><use href="#prev" /></a>
+    </g>
+
+    <g id="s2" class="scene s2">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="butter" href="#butter" />
+        <use class="granny" href="#granny" />
+      </g>
+
+      <a href="#s3"><use href="#next" /></a>
+      <a href="#s1"><use href="#prev" /></a>
+    </g>
+
+    <g id="s3" class="scene s3">
+      <use class="left"    href="#red"    />
+
+      <g class="right">
+        <use class="butter" href="#butter" />
+        <use class="forest" href="#forest" />
+        <use class="wolf"   href="#wolf"   />
+      </g>
+
+      <a href="#s4"><use href="#next" /></a>
+      <a href="#s2"><use href="#prev" /></a>
+    </g>
+
+    <g id="s4" class="scene s4">
+      <use class="left"  href="#red"  />
+      <use class="right" href="#wolf" />
+
+      <a href="#s5"><use href="#next" /></a>
+      <a href="#s3"><use href="#prev" /></a>
+    </g>
+
+    <g id="s5" class="scene s5">
+      <use class="left"  href="#red"  />
+      <use class="right" href="#wolf" />
+
+      <a href="#s6"><use href="#next" /></a>
+      <a href="#s4"><use href="#prev" /></a>
+    </g>
+
+    <g id="s6" class="scene s6">
+      <use class="left"  href="#red"  />
+      <use class="right" href="#wolf" />
+
+      <a href="#s7"><use href="#next" /></a>
+      <a href="#s5"><use href="#prev" /></a>
+    </g>
+
+    <g id="s7" class="scene s7">
+      <use class="left"  href="#red"  />
+      <use class="right" href="#wolf" />
+
+      <a href="#s8"><use href="#next" /></a>
+      <a href="#s6"><use href="#prev" /></a>
+    </g>
+
+    <g id="s8" class="scene s8">
+      <g class="wolf">
+        <use class="right" href="#wolf" />
+      </g>
+
+      <a href="#s9"><use href="#next" /></a>
+      <a href="#s7"><use href="#prev" /></a>
+    </g>
+
+    <g id="s9" class="scene s9">
+      <use class="left"  href="#wolf2" />
+      <use class="right" href="#cottage" />
+
+      <a href="#s10"><use href="#next" /></a>
+      <a href="#s8" ><use href="#prev" /></a>
+    </g>
+
+    <g id="s10" class="scene s10">
+      <use class="left"          href="#wolf2" />
+
+      <use class="cottage right" href="#cottage" />
+      <use class="granny  right" href="#granny" />
+
+      <a href="#s11"><use href="#next" /></a>
+      <a href="#s9" ><use href="#prev" /></a>
+    </g>
+
+    <g id="s11" class="scene s11">
+      <use class="left"  href="#wolf2" />
+      <use class="right" href="#granny" />
+
+      <a href="#s12"><use href="#next" /></a>
+      <a href="#s10"><use href="#prev" /></a>
+    </g>
+
+    <g id="s12" class="scene s12">
+      <use class="left"  href="#wolf2" />
+      <use class="right" href="#granny" />
+
+      <a href="#s13"><use href="#next" /></a>
+      <a href="#s11"><use href="#prev" /></a>
+    </g>
+
+    <g id="s13" class="scene s13">
+      <use class="right" href="#granny" />
+      <g class="left">
+        <g>
+          <use class="wDown" href="#wDown" />
+          <use class="wUp"   href="#wUp" />
+        </g>
+      </g>
+
+      <a href="#s14"><use href="#next" /></a>
+      <a href="#s12"><use href="#prev" /></a>
+    </g>
+
+    <g id="s14" class="scene s14">
+      <use class="right wolf"    href="#wolf2" x="80" />
+      <use class="right cottage" href="#cottage" />
+
+      <a href="#s15"><use href="#next" /></a>
+      <a href="#s13"><use href="#prev" /></a>
+    </g>
+
+    <g id="s15" class="scene s15">
+      <use class="left"  href="#red" />
+      <use class="right" href="#cottage" />
+
+      <a href="#s16"><use href="#next" /></a>
+      <a href="#s14"><use href="#prev" /></a>
+    </g>
+
+    <g id="s16" class="scene s16">
+      <use class="left" href="#red" />
+
+      <use class="right cottage" href="#cottage" />
+      <g   class="right wolf">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s17"><use href="#next" /></a>
+      <a href="#s15"><use href="#prev" /></a>
+    </g>
+
+    <g id="s17" class="scene s17">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s18"><use href="#next" /></a>
+      <a href="#s16"><use href="#prev" /></a>
+    </g>
+
+    <g id="s18" class="scene s18">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s19"><use href="#next" /></a>
+      <a href="#s17"><use href="#prev" /></a>
+    </g>
+
+    <g id="s19" class="scene s19">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s20"><use href="#next" /></a>
+      <a href="#s18"><use href="#prev" /></a>
+    </g>
+
+    <g id="s20" class="scene s20">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s21"><use href="#next" /></a>
+      <a href="#s19"><use href="#prev" /></a>
+    </g>
+
+    <g id="s21" class="scene s21">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s22"><use href="#next" /></a>
+      <a href="#s20"><use href="#prev" /></a>
+    </g>
+
+    <g id="s22" class="scene s22">
+      <use class="left"  href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s23"><use href="#next" /></a>
+      <a href="#s21"><use href="#prev" /></a>
+    </g>
+
+    <g id="s23" class="scene s23">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <g class="wolf">
+          <use class="wCapBack"  href="#gCapBack" />
+          <use href="#wolf" />
+          <use class="wCapFront" href="#gCapFront" />
+        </g>
+      </g>
+
+      <a href="#s24"><use href="#next" /></a>
+      <a href="#s22"><use href="#prev" /></a>
+    </g>
+
+    <g id="s24" class="scene s24">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wCapBack"  href="#gCapBack" />
+        <use href="#wolf" />
+        <use class="wCapFront" href="#gCapFront" />
+      </g>
+
+      <a href="#s25"><use href="#next" /></a>
+      <a href="#s23"><use href="#prev" /></a>
+    </g>
+
+    <g id="s25" class="scene s25">
+      <use class="left" href="#red" />
+
+      <g class="right">
+        <use class="wDown" href="#wDown" />
+        <use class="wUp"   href="#wUp" />
+      </g>
+
+      <a href="#s26"><use href="#next" /></a>
+      <a href="#s24"><use href="#prev" /></a>
+    </g>
+
+    <g id="s26" class="scene s26">
+      <g class="left">
+        <use href="#capBack" />
+        <use href="#capFront" />
+
+        <use class="puff" href="#cloud" x="-93" y="37" />
+        <use class="puff" href="#cloud" x="-93" y="33" />
+        <use class="puff" href="#cloud" x="-88" y="36" />
+        <use class="puff" href="#cloud" x="-97" y="36" />
+        <use class="puff" href="#cloud" x="-95" y="40" />
+        <use class="puff" href="#cloud" x="-90" y="40" />
+      </g>
+
+      <g class="right">
+        <use class="wDown" href="#wDown" />
+        <use class="wUp"   href="#wUp" />
+      </g>
+
+      <a href="#s27"><use href="#next" /></a>
+      <a href="#s25"><use href="#prev" /></a>
+    </g>
+
+    <g id="s27" class="scene s27">
+      <g class="left cap">
+        <use href="#capBack" />
+        <use href="#capFront" />
+      </g>
+      <g class="left red">
+        <use href="#ninja" />
+        <use href="#saber" />
+      </g>
+      <g class="right">
+        <use class="wDown" href="#wDown" />
+        <use class="wUp"   href="#wUp" />
+      </g>
+
+      <a href="#s28"><use href="#next" /></a>
+      <a href="#s26"><use href="#prev" /></a>
+    </g>
+
+    <g id="s28" class="scene s28">
+      <g class="left">
+        <use href="#ninja" />
+        <use class="saber" href="#saber" />
+      </g>
+      <g class="right">
+        <use class="wDown" href="#wDown" />
+        <use class="wUp"   href="#wUp" />
+      </g>
+
+      <a href="#s29"><use href="#next" /></a>
+      <a href="#s27"><use href="#prev" /></a>
+    </g>
+
+    <g id="s29" class="scene s29">
+      <g class="right ninja">
+        <use x="80" href="#ninja" />
+        <use x="80" class="saber" href="#saber" />
+      </g>
+      <use class="right red" x="80" href="#red" />
+
+      <use class="left" x="-80" href="#granny" />
+      <g>
+        <use class="puff" href="#cloud" x="-93" y="37" />
+        <use class="puff" href="#cloud" x="-93" y="33" />
+        <use class="puff" href="#cloud" x="-88" y="36" />
+        <use class="puff" href="#cloud" x="-97" y="36" />
+        <use class="puff" href="#cloud" x="-95" y="40" />
+        <use class="puff" href="#cloud" x="-90" y="40" />
+      </g>
+
+      <a href="#s30"><use href="#next" /></a>
+      <a href="#s28"><use href="#prev" /></a>
+    </g>
+
+    <g id="s30" class="scene s30">
+      <use class="cake" href="#butter" />
+
+      <use class="left"  x="-80" href="#granny" />
+      <use class="right" x="80"  href="#red" />
+
+      <a href="#s31"><use href="#next" /></a>
+      <a href="#s29"><use href="#prev" /></a>
+    </g>
+
+    <g id="s31" class="scene s31">
+      <use class="left" x="-80" href="#granny" />
+      <use class="right" x="80" href="#red" />
+
+      <a href="#s30"><use href="#prev" /></a>
+      <a href="#s0" ><use href="#next" /></a>
+    </g>
+  </svg>
+</main>
+
+<aside>
+  <ol>
+    <li class="s1" >Once upon a time there was a little red riding hood</li>
+    <li class="s2" >She was visiting her granny, bringing her some cake and butter.</li>
+    <li class="s3" >As she was walking her way through the forest, a wolf arised.</li>
+    <li class="s4" >"<em>Yo miss red! wadaya doin' here?</em>", he said.</li>
+    <li class="s5" >"<em>Behold, as I'm bringing some cake and butter to my granny.</em>", she said.</li>
+    <li class="s6" >"<em>Err! Yeah, sure. Wanna some company?</em>", he said.</li>
+    <li class="s7" >"<em>Back off despicable person, alone I will go!</em>" and she moved away.</li>
+    <li class="s8" >"<em>I know where you go, bitch! For sure I will get you.</em>", so he plotted.</li>
+    <li class="s9" >Then he ran to granny's cottage, where he knocked at the door.</li>
+    <li class="s10">"<em>Dear Lord! Who's there?</em>", asked granny.</li>
+    <li class="s11">Faking his voice, the wolf said "<em>This is Red, with some cake and butter</em>"</li>
+    <li class="s12">"<em>Dear Lord! Get in my child, I'm hungry</em>", and she opened the door.</li>
+    <li class="s13">"<em>Fool! I am the real hungry one!</em>", and he swallowed her whole.</li>
+    <li class="s14">So he got granny's outfit and put himself in her shoes!</li>
+    <li class="s15">As our Little Red Riding Hood finally arrived, she knocked at the door.</li>
+    <li class="s16">"<em>Dear Lord! who's there?</em>", asked the wolf with sort of granny's voice.</li>
+    <li class="s17">"<em>See, see! Here's your granddaughter bringing some cake and butter!</em>" she said.</li>
+    <li class="s18">"<em>Dear Lord! Get in my child, I'm so hungry.</em>", to speak of truth.</li>
+    <li class="s19">As she walked in, she looked at granny and found some oddities.</li>
+    <li class="s20">"<em>Oh dear elder, what big eyes you have!</em>", said the Hood.</li>
+    <li class="s21">"<em>Dear Lord! It's to see you better.</em>", said the wolf.</li>
+    <li class="s22">"<em>Oh dear elder, what big hears you have!</em>", said the Hood.</li>
+    <li class="s23">"<em>Dear Lord! It's to hear you better.</em>", said the wolf.</li>
+    <li class="s24">"<em>Oh dear elder, what big teeth you have!</em>", said the Hood.</li>
+    <li class="s25">"<em>Dear Lord! It's to EAT YOU BETTER!</em>", and to jump at the Hood his jaws wide open.</li>
+    <li class="s26">An empty Hood as we have to say!</li>
+    <li class="s27">To the greatest surprise of the wolf, the red ninja reveal herself.</li>
+    <li class="s28">It only took one second... and wolf no more we'll ever have to fear.</li>
+    <li class="s29">At last the cake and butter were delivered</li>
+    <li class="s30">At last they were eaten as those cake and butter were no ninjas!</li>
+    <li class="s31">And they lived happily ever after</li>
+  </ol>
+</aside>

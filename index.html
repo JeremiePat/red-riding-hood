@@ -137,6 +137,7 @@
   .scene .left    { transform-origin:  60px 50px }
   .scene .right   { transform-origin: 140px 50px }
   .scene .right * { transform-origin: 140px 50px }
+  * {backface-visibility: hidden }
 
 
   /* SCENE 1 --------------------------------------------------------------- */
@@ -152,11 +153,11 @@
   @keyframes backToFront   {from {transform: rotateY(-180deg); backface-visibility: hidden}}
   @keyframes frontToBack   {to   {transform: rotateY( 180deg); backface-visibility: hidden}}
 
-  #s2 .left     { animation: 0.50s ease-out       0s both centerToLeft }
-  #s2 .right    { animation: 0.50s ease-in     1.00s both fadeIn,
-                             0.30s ease-out    1.00s both centerToRight }
-  #s2 .butter   { animation: 0.15s ease-in-out 2.65s both backToFront }
-  #s2 .granny   { animation: 0.15s ease-in-out 2.65s both frontToBack }
+  #s2:target .left     { animation: 0.50s ease-out       0s both centerToLeft }
+  #s2:target .right    { animation: 0.50s ease-in     1.00s both fadeIn,
+                                    0.30s ease-out    1.00s both centerToRight }
+  #s2:target .butter   { animation: 0.15s ease-in-out 2.65s both backToFront }
+  #s2:target .granny   { animation: 0.15s ease-in-out 2.65s both frontToBack }
 
 
   /* SCENE 3 --------------------------------------------------------------- */
@@ -164,75 +165,75 @@
   @keyframes goMid   {from {transform: translate(0,  30px)}}
   @keyframes goUp    {to   {transform: translate(0, -30px)}}
 
-  #s3 .butter   { animation: 0.5s ease-out 0s both     goUp,
-                             0.3s ease-out 0s both     fadeOut }
-  #s3 .forest   { animation: 0.5s ease-in  0s both     fadeIn,
-                             0.3s ease-in  0s both     goMid,
-                             0.5s ease-out 2s forwards goUp,
-                             0.3s ease-out 2s forwards fadeOut }
-  #s3 .wolf     { animation: 0.5s ease-in  2s both     fadeIn,
-                             0.5s ease-in  2s both     goMid }
+  #s3:target .butter   { animation: 0.5s ease-out 0s both     goUp,
+                                    0.3s ease-out 0s both     fadeOut }
+  #s3:target .forest   { animation: 0.5s ease-in  0s both     fadeIn,
+                                    0.3s ease-in  0s both     goMid,
+                                    0.5s ease-out 2s forwards goUp,
+                                    0.3s ease-out 2s forwards fadeOut }
+  #s3:target .wolf     { animation: 0.5s ease-in  2s both     fadeIn,
+                                    0.5s ease-in  2s both     goMid }
 
 
   /* SCENE 4 --------------------------------------------------------------- */
   @keyframes bounceUp {50% {transform: translate(0, -10px)}}
 
-  #s4 .right    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s4:target .right    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 5 --------------------------------------------------------------- */
-  #s5 .left     { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s5:target .left     { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 6 --------------------------------------------------------------- */
   @keyframes moveLeft {to {transform: translate(-20px, 0)}}
 
-  #s6 .right    { animation: 3s cubic-bezier(1,0,1,0) 0s both moveLeft }
+  #s6:target .right    { animation: 3s cubic-bezier(1,0,1,0) 0s both moveLeft }
 
 
   /* SCENE 7 --------------------------------------------------------------- */
   @keyframes pitchLeft {to {transform: translate( -10px, 0)}}
   @keyframes wideLeft  {to {transform: translate(-100px, 0)}}
 
-  #s7 .right    { transform: translate(-20px, 0px) }
-  #s7 .left     { animation: 0.2s ease 0s both pitchLeft,
-                             0.3s ease 2s both wideLeft ,
-                             0.2s ease 2s both fadeOut }
+  #s7 .right           { transform: translate(-20px, 0px) }
+  #s7:target .left     { animation: 0.2s ease 0s both pitchLeft,
+                                    0.3s ease 2s both wideLeft ,
+                                    0.2s ease 2s both fadeOut }
 
   /* SCENE 8 --------------------------------------------------------------- */
   @keyframes rightToCenter {to {transform: translate(-40px, 0)}}
   @keyframes wideRight     {to {transform: translate(150px, 0)}}
   @keyframes fullFlip      {to {transform: rotateY(180deg)}}
 
-  #s8 .wolf     { transform: translate(-20px, 0px) }
-  #s8 .right    { animation: 0.25s ease    5.5s forwards fullFlip; }
-  #s8 .wolf     { animation: 5.00s linear    0s forwards rightToCenter,
-                             0.25s ease    5.8s forwards wideRight,
-                             0.25s ease-in 5.8s both     fadeOut }
+  #s8 .wolf            { transform: translate(-20px, 0px) }
+  #s8:target .right    { animation: 0.25s ease    5.5s forwards fullFlip; }
+  #s8:target .wolf     { animation: 5.00s linear    0s forwards rightToCenter,
+                                    0.25s ease    5.8s forwards wideRight,
+                                    0.25s ease-in 5.8s both     fadeOut }
 
 
   /* SCENE 9 --------------------------------------------------------------- */
   @keyframes leftIn  {from {transform: translate(-100px, 0)}}
   @keyframes rightIn {from {transform: translate( 100px, 0)}}
 
-  #s9 .left     { animation: 0.2s ease 0s both leftIn,
-                             0.2s ease 0s both fadeIn }
-  #s9 .right    { animation: 0.2s ease 0s both rightIn,
-                             0.2s ease 0s both fadeIn }
+  #s9:target .left     { animation: 0.2s ease 0s both leftIn,
+                                    0.2s ease 0s both fadeIn }
+  #s9:target .right    { animation: 0.2s ease 0s both rightIn,
+                                    0.2s ease 0s both fadeIn }
 
 
   /* SCENE 10 -------------------------------------------------------------- */
-  #s10 .cottage { animation: 0.15s ease-in-out   0s both frontToBack }
-  #s10 .granny  { animation: 0.15s ease-in-out   0s both backToFront,
-                             0.20s ease-in-out 0.3s both bounceUp }
+  #s10:target .cottage { animation: 0.15s ease-in-out   0s both frontToBack }
+  #s10:target .granny  { animation: 0.15s ease-in-out   0s both backToFront,
+                                    0.20s ease-in-out 0.3s both bounceUp }
 
 
   /* SCENE 11 -------------------------------------------------------------- */
-  #s11 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s11:target .left    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 12 -------------------------------------------------------------- */
-  #s12 .right   { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s12:target .right   { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 13 -------------------------------------------------------------- */
@@ -246,106 +247,106 @@
   @keyframes crossToRight {to  {transform: translate(80px, 0)}}
   @keyframes rollBack     {70% {transform: rotate(40deg)}}
 
-  #s13 .left g  { transform-origin: 100px 50px; transform: rotateY(180deg) }
-  #s13 .wDown   { transform-origin: 150px 50px }
-  #s13 .wUp     { transform-origin: 150px 50px }
+  #s13 .left g         { transform-origin: 100px 50px; transform: rotateY(180deg) }
+  #s13 .wDown          { transform-origin: 150px 50px }
+  #s13 .wUp            { transform-origin: 150px 50px }
 
-  #s13 .left    { animation: 0.2s ease-in-out   0s both bounceUp,
-                             0.5s ease        1.0s both crossToRight }
-  #s13 .wDown   { animation: 0.3s ease        1.0s both bite         }
-  #s13 .wUp     { animation: 0.3s ease        1.0s both rollBack     }
-  #s13 .right   { animation: 0.2s ease        1.2s both fadeOut      }
+  #s13:target .left    { animation: 0.2s ease-in-out   0s both bounceUp,
+                                    0.5s ease        1.0s both crossToRight }
+  #s13:target .wDown   { animation: 0.3s ease        1.0s both bite         }
+  #s13:target .wUp     { animation: 0.3s ease        1.0s both rollBack     }
+  #s13:target .right   { animation: 0.2s ease        1.2s both fadeOut      }
 
 
   /* SCENE 14 -------------------------------------------------------------- */
-  #s14 .wolf    { animation: 0.5s ease-in-out 1s forwards frontToBack }
-  #s14 .cottage { animation: 0.5s ease-in-out 1s both     backToFront }
+  #s14:target .wolf    { animation: 0.5s ease-in-out 1s forwards frontToBack }
+  #s14:target .cottage { animation: 0.5s ease-in-out 1s both     backToFront }
 
 
   /* SCENE 15 -------------------------------------------------------------- */
-  #s15 .left    { animation: 1s ease 0s forwards leftIn }
+  #s15:target .left    { animation: 1s ease 0s forwards leftIn }
 
 
   /* SCENE 16 -------------------------------------------------------------- */
-  #s16 .cottage { animation: 0.25s ease-in-out   0s both frontToBack }
-  #s16 .wolf    { animation: 0.25s ease-in-out   0s both backToFront,
+  #s16:target .cottage { animation: 0.25s ease-in-out   0s both frontToBack }
+  #s16:target .wolf    { animation: 0.25s ease-in-out   0s both backToFront,
                              0.20s ease-in-out 0.5s both bounceUp }
 
 
   /* SCENE 17 -------------------------------------------------------------- */
-  #s17 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s17:target .left    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 18 -------------------------------------------------------------- */
-  #s18 .right   { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s18:target .right   { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 19 -------------------------------------------------------------- */
   @keyframes forthAndBack {80%,90% {transform: translate(10px, 0)}}
 
-  #s19 .left    { animation: 5s ease 0s both forthAndBack }
+  #s19:target .left    { animation: 5s ease 0s both forthAndBack }
 
 
   /* SCENE 20 -------------------------------------------------------------- */
-  #s20 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s20:target .left    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 21 -------------------------------------------------------------- */
   @keyframes stepToLeft {to {transform: translate(-5px, 0)}}
 
-  #s21 .right   { animation: 0.2s ease-in-out 0s both bounceUp,
+  #s21:target .right   { animation: 0.2s ease-in-out 0s both bounceUp,
                              0.2s ease-in-out 0s both stepToLeft }
 
 
   /* SCENE 22 -------------------------------------------------------------- */
-  #s22 .right   { transform: translate(-5px, 0) }
-  #s22 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s22 .right          { transform: translate(-5px, 0) }
+  #s22:target .left    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 23 -------------------------------------------------------------- */
-  #s23 .right   { transform: translate(-5px, 0) }
-  #s23 .wolf    { animation: 0.2s ease-in-out 0s both bounceUp,
+  #s23 .right          { transform: translate(-5px, 0) }
+  #s23:target .wolf    { animation: 0.2s ease-in-out 0s both bounceUp,
                              0.2s ease-in-out 0s both stepToLeft }
 
 
   /* SCENE 24 -------------------------------------------------------------- */
-  #s24 .right   { transform: translate(-10px, 0) }
-  #s24 .left    { animation: 0.2s ease-in-out 0s both bounceUp }
+  #s24 .right          { transform: translate(-10px, 0) }
+  #s24:target .left    { animation: 0.2s ease-in-out 0s both bounceUp }
 
 
   /* SCENE 25 -------------------------------------------------------------- */
   @keyframes openWideDown {4% {transform: rotate(-50deg)} 100% {transform: rotate(-60deg)}}
   @keyframes openWideUp   {4% {transform: rotate( 25deg)} 100% {transform: rotate( 40deg)}}
 
-  #s25 .right   { transform: translate(-10px, 0) }
-  #s25 .wDown   { transform-origin: 150px 50px; transform: rotate(-10deg) }
-  #s25 .wUp     { transform-origin: 150px 50px }
+  #s25 .right          { transform: translate(-10px, 0) }
+  #s25 .wDown          { transform-origin: 150px 50px; transform: rotate(-10deg) }
+  #s25 .wUp            { transform-origin: 150px 50px }
 
-  #s25 .wDown   { animation:  0.2s ease-in-out   0s both     bounceUp,
-                             10.0s ease-out    0.3s both     openWideDown }
-  #s25 .wUp     { animation:  0.2s ease-in-out   0s both     bounceUp,
-                             10.0s ease-out    0.3s both     openWideUp }
-  #s25 .right   { animation:  0.4s ease-out    0.3s forwards rightToCenter }
+  #s25:target .wDown   { animation:  0.2s ease-in-out   0s both     bounceUp,
+                                    10.0s ease-out    0.3s both     openWideDown }
+  #s25:target .wUp     { animation:  0.2s ease-in-out   0s both     bounceUp,
+                                    10.0s ease-out    0.3s both     openWideUp }
+  #s25:target .right   { animation:  0.4s ease-out    0.3s forwards rightToCenter }
 
 
   /* SCENE 26 -------------------------------------------------------------- */
   @keyframes puffes  { to {transform: scale(2.2); opacity: 0}}
 
-  #s26 .right   { transform: translate(-40px, 0) }
-  #s26 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
-  #s26 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none }
-  #s26 .puff    { transform-origin:  60px 55px }
+  #s26 .right          { transform: translate(-40px, 0) }
+  #s26 .wDown          { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s26 .wUp            { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none }
+  #s26 .puff           { transform-origin:  60px 55px }
 
-  #s26 .puff    { animation: 0.5s ease-out both puffes; }
+  #s26:target .puff    { animation: 0.5s ease-out both puffes; }
 
 
   /* SCENE 27 -------------------------------------------------------------- */
-  #s27 .right   { transform: translate(-40px, 0) }
-  #s27 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
-  #s27 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none; }
+  #s27 .right          { transform: translate(-40px, 0) }
+  #s27 .wDown          { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s27 .wUp            { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none; }
 
-  #s27 .red     { animation: 0.25s ease-in-out 0s both backToFront }
-  #s27 .cap     { animation: 0.25s ease-in-out 0s both frontToBack }
+  #s27:target .red     { animation: 0.25s ease-in-out 0s both backToFront }
+  #s27:target .cap     { animation: 0.25s ease-in-out 0s both frontToBack }
 
 
   /* SCENE 28 -------------------------------------------------------------- */
@@ -353,26 +354,26 @@
   @keyframes shutIt      {to {transform: rotate(  0deg)}}
   @keyframes cutIt       {to {transform: rotate(240deg)}}
 
-  #s28 .right   { transform-origin:  65px 50px; transform: translate(-40px, 0) }
-  #s28 .saber   { transform-origin:  53px 57px; }
-  #s28 .wDown   { transform-origin: 150px 50px; transform: rotate(-60deg) }
-  #s28 .wUp     { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-kill: block; --wolf-eye: none; }
+  #s28 .right          { transform-origin:  65px 50px; transform: translate(-40px, 0) }
+  #s28 .saber          { transform-origin:  53px 57px; }
+  #s28 .wDown          { transform-origin: 150px 50px; transform: rotate(-60deg) }
+  #s28 .wUp            { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-kill: block; --wolf-eye: none; }
 
-  #s28 .left    { animation: 0.15s ease 0s both crossToRight }
-  #s28 .saber   { animation: 0.25s ease 0s both cutIt }
-  #s28 .right   { animation: 0.15s ease 0s both crossToLeft }
-  #s28 .wDown   { animation: 0.15s ease 0s both shutIt }
-  #s28 .wUp     { animation: 0.15s ease 0s both shutIt }
+  #s28:target .left    { animation: 0.15s ease 0s both crossToRight }
+  #s28:target .saber   { animation: 0.25s ease 0s both cutIt }
+  #s28:target .right   { animation: 0.15s ease 0s both crossToLeft }
+  #s28:target .wDown   { animation: 0.15s ease 0s both shutIt }
+  #s28:target .wUp     { animation: 0.15s ease 0s both shutIt }
 
 
   /* SCENE 29 -------------------------------------------------------------- */
-  #s29 .puff    { transform-origin:  60px 55px; transform: scale(1.5) }
-  #s29 .saber   { transform-origin: 133px 57px; transform: rotate(240deg) }
+  #s29 .puff           { transform-origin:  60px 55px; transform: scale(1.5) }
+  #s29 .saber          { transform-origin: 133px 57px; transform: rotate(240deg) }
 
-  #s29 .red     { animation: 0.25s ease-in-out 0s both backToFront }
-  #s29 .ninja   { animation: 0.25s ease-in-out 0s both frontToBack }
-  #s29 .puff    { animation: 0.20s ease        0s both puffes }
-  #s29 .left    { animation: 0.50s ease-out  0.2s both fadeIn }
+  #s29:target .red     { animation: 0.25s ease-in-out 0s both backToFront }
+  #s29:target .ninja   { animation: 0.25s ease-in-out 0s both frontToBack }
+  #s29:target .puff    { animation: 0.20s ease        0s both puffes }
+  #s29:target .left    { animation: 0.50s ease-out  0.2s both fadeIn }
 
 
   /* SCENE 30 -------------------------------------------------------------- */
@@ -382,13 +383,13 @@
     100% {opacity: 0; transform: translate(-70px, 0) scale(0.5)}
   }
 
-  #s30 .cake    { transform-origin: 100px 50px }
-  #s30 .cake    { animation: 1s ease both passAlong }
+  #s30 .cake           { transform-origin: 100px 50px }
+  #s30:target .cake    { animation: 1s ease both passAlong }
 
 
   /* SCENE 31 -------------------------------------------------------------- */
-  #s31 .right   { animation: 0.2s ease-in-out both bounceUp }
-  #s31 .left    { animation: 0.2s ease-in-out both bounceUp }
+  #s31:target .right   { animation: 0.2s ease-in-out both bounceUp }
+  #s31:target .left    { animation: 0.2s ease-in-out both bounceUp }
 
 </style>
 

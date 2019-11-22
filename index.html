@@ -137,7 +137,6 @@
   .scene .left    { transform-origin:  60px 50px }
   .scene .right   { transform-origin: 140px 50px }
   .scene .right * { transform-origin: 140px 50px }
-  * {backface-visibility: hidden }
 
 
   /* SCENE 1 --------------------------------------------------------------- */
@@ -150,14 +149,14 @@
   /* SCENE 2 --------------------------------------------------------------- */
   @keyframes centerToLeft  {from {transform: translate( 40px,0)}}
   @keyframes centerToRight {from {transform: translate(-40px,0)}}
-  @keyframes backToFront   {from {transform: rotateY(-180deg); backface-visibility: hidden}}
-  @keyframes frontToBack   {to   {transform: rotateY( 180deg); backface-visibility: hidden}}
+  @keyframes backToFront   {from {transform: rotateY(-90deg)}}
+  @keyframes frontToBack   {to   {transform: rotateY( 90deg)}}
 
-  #s2:target .left     { animation: 0.50s ease-out       0s both centerToLeft }
-  #s2:target .right    { animation: 0.50s ease-in     1.00s both fadeIn,
-                                    0.30s ease-out    1.00s both centerToRight }
-  #s2:target .butter   { animation: 0.15s ease-in-out 2.65s both backToFront }
-  #s2:target .granny   { animation: 0.15s ease-in-out 2.65s both frontToBack }
+  #s2:target .left     { animation: 0.50s  ease-out       0s  both centerToLeft }
+  #s2:target .right    { animation: 0.50s  ease-in     1.00s  both fadeIn,
+                                    0.30s  ease-out    1.00s  both centerToRight }
+  #s2:target .butter   { animation: 0.075s ease-in-out 2.725s both backToFront }
+  #s2:target .granny   { animation: 0.075s ease-in-out 2.65s  both frontToBack }
 
 
   /* SCENE 3 --------------------------------------------------------------- */
@@ -223,9 +222,11 @@
 
 
   /* SCENE 10 -------------------------------------------------------------- */
-  #s10:target .cottage { animation: 0.15s ease-in-out   0s both frontToBack }
-  #s10:target .granny  { animation: 0.15s ease-in-out   0s both backToFront,
-                                    0.20s ease-in-out 0.3s both bounceUp }
+  /* #s10 .granny { transform} */
+
+  #s10:target .cottage { animation: 0.075s ease-in-out 0s     both     frontToBack }
+  #s10:target .granny  { animation: 0.075s ease-in-out 0.075s both     backToFront,
+                                    0.20s ease-in-out  0.3s   forwards bounceUp }
 
 
   /* SCENE 11 -------------------------------------------------------------- */
@@ -259,8 +260,8 @@
 
 
   /* SCENE 14 -------------------------------------------------------------- */
-  #s14:target .wolf    { animation: 0.5s ease-in-out 1s forwards frontToBack }
-  #s14:target .cottage { animation: 0.5s ease-in-out 1s both     backToFront }
+  #s14:target .wolf    { animation: 0.25s ease-in-out 1s    forwards frontToBack }
+  #s14:target .cottage { animation: 0.25s ease-in-out 1.25s both     backToFront }
 
 
   /* SCENE 15 -------------------------------------------------------------- */
@@ -268,9 +269,9 @@
 
 
   /* SCENE 16 -------------------------------------------------------------- */
-  #s16:target .cottage { animation: 0.25s ease-in-out   0s both frontToBack }
-  #s16:target .wolf    { animation: 0.25s ease-in-out   0s both backToFront,
-                             0.20s ease-in-out 0.5s both bounceUp }
+  #s16:target .cottage { animation: 0.125s ease-in-out 0s     both     frontToBack }
+  #s16:target .wolf    { animation: 0.125s ease-in-out 0.125s both     backToFront,
+                                    0.20s  ease-in-out 0.5s   forwards bounceUp }
 
 
   /* SCENE 17 -------------------------------------------------------------- */
@@ -345,8 +346,8 @@
   #s27 .wDown          { transform-origin: 150px 50px; transform: rotate(-60deg) }
   #s27 .wUp            { transform-origin: 150px 50px; transform: rotate( 40deg); --wolf-surprised: block; --wolf-eye: none; }
 
-  #s27:target .red     { animation: 0.25s ease-in-out 0s both backToFront }
-  #s27:target .cap     { animation: 0.25s ease-in-out 0s both frontToBack }
+  #s27:target .red     { animation: 0.125s ease-in-out 0.125s both backToFront }
+  #s27:target .cap     { animation: 0.125s ease-in-out     0s both frontToBack }
 
 
   /* SCENE 28 -------------------------------------------------------------- */
@@ -370,10 +371,10 @@
   #s29 .puff           { transform-origin:  60px 55px; transform: scale(1.5) }
   #s29 .saber          { transform-origin: 133px 57px; transform: rotate(240deg) }
 
-  #s29:target .red     { animation: 0.25s ease-in-out 0s both backToFront }
-  #s29:target .ninja   { animation: 0.25s ease-in-out 0s both frontToBack }
-  #s29:target .puff    { animation: 0.20s ease        0s both puffes }
-  #s29:target .left    { animation: 0.50s ease-out  0.2s both fadeIn }
+  #s29:target .red     { animation: 0.125s ease-in-out 0.125s both backToFront }
+  #s29:target .ninja   { animation: 0.125s ease-in-out     0s both frontToBack }
+  #s29:target .puff    { animation: 0.20s  ease            0s both puffes }
+  #s29:target .left    { animation: 0.50s  ease-out      0.2s both fadeIn }
 
 
   /* SCENE 30 -------------------------------------------------------------- */
